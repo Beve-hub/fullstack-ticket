@@ -1,14 +1,26 @@
 const express = require('express');
 const mongoose = require("mongoose"); // Corrected import
 const bodyParser = require('body-parser');
-
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 require('dotenv').config(); // Load environment variables
-console.log("Email User:", process.env.EMAIL_USER);
-console.log("Email Pass:", process.env.EMAIL_PASS);
+
 const app = express();
+
+
 app.use(express.json()); // Middleware to parse JSON bodies in POST requests
 app.use(bodyParser.json());
+app.use(cookieParser())
+app.use(session({
+    secret: 'AUYSIDOEPMDMFNDKSKFLKSKFQQQ',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000,      // Adjust expiration time as needed
+        sameSite: 'strict', // or try 'lax' if you have issues
+        secure: false       // Set to `true` if using HTTPS
+        }  // For development purposes, you might want to set secure to true when deploying to production.  This will only work if your application is served over HTTPS.  This prevents the cookie from being sent over HTTP.  Also, make sure to set your domain correctly in your client-side code.  This is a basic setup.  You might want to consider using a more secure session management strategy for production.  For example, you could use a
+}))
 
 
 const URI = "mongodb://localhost:27017/data";

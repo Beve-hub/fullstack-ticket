@@ -12,7 +12,7 @@ const eventSchema = new mongoose.Schema({
   endDate: Date,
   location: String,
   price: Number,
-  time: Number,
+  eventTime: String,
   url: String,
   linkedinUrl: String,
   twitterUrl: String,

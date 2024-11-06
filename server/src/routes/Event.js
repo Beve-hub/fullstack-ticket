@@ -8,6 +8,13 @@ router.post('/', async (req, res) => {
     try {
         const event = new Event(req.body);
         await event.save();
+
+        const {createEvent} = event;
+        if (createEvent) {
+            const {item} = event
+            item.push(event);
+            req.session.book.item = item;
+        }
         res.status(201).json(event);
     } catch (error) {
         res.status(400).json({ error: error.message });

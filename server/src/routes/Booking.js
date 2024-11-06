@@ -10,6 +10,12 @@ router.post('/', async (req, res) => {
     try {
         const booking = new Booking(req.body);
         await booking.save();
+        const {book} = booking;
+        if (book) {
+            const {item} = booking
+            item.push(booking);
+            req.session.book.item = item;
+        }
         res.status(201).json(booking);
     } catch (error) {
         res.status(400).json({ error: error.message });
