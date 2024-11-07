@@ -14,14 +14,21 @@ router.post('/register',  async (req, res) => {
 
         // Check if user already exists
         const user = await User.findOne({email});
-        if (user) { 
-            
+        if (user) {             
             res.status(400).json({message: 'User already exists'})
         } else {
             const hashedPassword = hashPassword(password);
            const newUser = new User({name, email, password: hashedPassword });
            await newUser.save();
-           res.json({message: 'User registered successfully'});
+ 
+
+           // create session
+           if (req.session.user) {
+            res.send(req.session.user)
+        } else {
+            req.session.user = { id: user._id };
+            return res.json({message: 'User login succesfuly '});
+        } 
         }
 
         
@@ -44,6 +51,14 @@ router.post('/login', async(req, res) => {
             if (!isMatch) {
                 return res.status(400).json({message: 'Invalid password'});
             }
+
+            // create session
+            if (req.session.user) {
+                res.send(req.session.user)
+            } else {
+                req.session.user = { id: user._id };
+                return res.json({message: 'User login succesfuly '});
+            } 
         }
         
      

@@ -3,6 +3,14 @@ const Event = require('../models/CreateEvent');
 
 const router = Router();
 
+
+router.use((req,res,next) => {
+    if (req.session.user){
+    next()}
+    else{
+        res.status(401).json({message: 'Unauthorized'})
+    }
+});
 // Route to create a new event
 router.post('/', async (req, res) => {
     try {
